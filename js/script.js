@@ -1,31 +1,46 @@
-$(document).ready(function(){
-    $('#menu').click(function(){
-        $(this).toggleClass('fa-times');
-        $('.navbar').toggleClass('nav-toggle');
-    });
+document.addEventListener("DOMContentLoaded", function () {
+  const menu = document.querySelector("#menu");
+  const navbar = document.querySelector(".navbar");
+  const loginBtn = document.querySelector("#login");
+  const loginForm = document.querySelector(".login-form");
+  const closeLoginForm = document.querySelector(".login-form form .fa-times");
 
-    $('#login').click(function(){
-        $('.login-form').addClass('popup');
-    });
+  menu.addEventListener("click", function () {
+    menu.classList.toggle("fa-times");
+    navbar.classList.toggle("nav-toggle");
+  });
 
-    $('.login-form form .fa-times').click(function(){
-        $('.login-form').removeClass('popup');
-    });
+  loginBtn.addEventListener("click", function () {
+    loginForm.classList.add("popup");
+  });
 
-    $(window).on('load scroll',function(){
-        $('#menu').removeClass('fa-times');
-        $('.navbar').removeClass('nav-toggle');
-        $('.login-form').removeClass('popup');
-        $('section').each(function(){
-            let top = $(window).scrollTop();
-            let height = $(this).height();
-            let id = $(this).attr('id');
-            let offset = $(this).offset().top - 200;
+  closeLoginForm.addEventListener("click", function () {
+    loginForm.classList.remove("popup");
+  });
 
-            if(top > offset && top < offset + height){
-                $('.navbar ul li a').removeClass('active');
-                $('.navbar').find(`[href="#${id}"]`).addClass('active');
-            }
+  window.addEventListener("load", onScrollOrLoad);
+  window.addEventListener("scroll", onScrollOrLoad);
+
+  function onScrollOrLoad() {
+    menu.classList.remove("fa-times");
+    navbar.classList.remove("nav-toggle");
+    loginForm.classList.remove("popup");
+
+    document.querySelectorAll("section").forEach(function (section) {
+      let top = window.scrollY;
+      let height = section.offsetHeight;
+      let id = section.getAttribute("id");
+      let offset = section.offsetTop - 200;
+
+      if (top > offset && top < offset + height) {
+        document.querySelectorAll(".navbar ul li a").forEach(function (link) {
+          link.classList.remove("active");
         });
+        const activeLink = navbar.querySelector(`[href="#${id}"]`);
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
+      }
     });
-}); 
+  }
+});
